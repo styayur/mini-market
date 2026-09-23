@@ -45,3 +45,5 @@ work/
 
 # Static export
 out/
+
+.qa/

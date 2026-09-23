@@ -24,7 +24,9 @@ export type SortOption =
   | "newest"
   | "most-collected"
   | "most-backed"
-  | "alphabetical";
+  | "alphabetical"
+  | "price-low"
+  | "price-high";
 
 export interface Product {
   id: string;
@@ -107,6 +109,25 @@ export interface Transaction {
   status: "COMPLETED" | "PENDING";
 }
 
+export interface MarketOrder {
+  id: string;
+  createdAt: string;
+  total: number;
+  balanceAfter: number;
+  items: {
+    productId: string;
+    name: string;
+    quantity: number;
+    unitPrice: number;
+  }[];
+}
+
+export interface WalletTopUp {
+  id: string;
+  amount: number;
+  createdAt: string;
+}
+
 export interface ConceptBacking {
   id: string;
   conceptId: string;
@@ -125,6 +146,9 @@ export interface Category {
 
 export interface PersistedMarketplaceState {
   credits: number;
+  cartQuantities: Record<string, number>;
+  orders: MarketOrder[];
+  topUps: WalletTopUp[];
   cartProductIds: string[];
   favoriteProductIds: string[];
   watchedConceptIds: string[];

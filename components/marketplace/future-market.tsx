@@ -1,45 +1,156 @@
 "use client";
-
+import Link from "next/link";
 import { useMemo, useState } from "react";
-import { ConceptCard, ConceptRankItem } from "@/components/concept/concept-card";
-import { SectionHeader } from "@/components/ui/section-header";
+import { ArrowUpRight, FlaskConical, Search, Sparkles } from "lucide-react";
+import { ConceptCard } from "@/components/concept/concept-card";
 import { useMarketplace } from "@/components/providers/marketplace-provider";
-import type { Concept, SortOption } from "@/types/marketplace";
-
-function ConceptGrid({ concepts }: { concepts: Concept[] }) {
-  return <div className="grid-products">{concepts.map((concept, index) => <ConceptCard key={concept.id} concept={concept} compact={index > 2} />)}</div>;
-}
+import { useLanguage } from "@/components/providers/language-provider";
 
 export function FutureMarket() {
-  const { allConcepts } = useMarketplace();
-  const [sort, setSort] = useState<SortOption>("trending");
-  const sorted = useMemo(() => [...allConcepts].sort((a, b) => {
-    if (sort === "newest") return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-    if (sort === "most-collected") return b.watchers - a.watchers;
-    if (sort === "most-backed") return b.supporters - a.supporters;
-    if (sort === "alphabetical") return a.name.localeCompare(b.name);
-    return b.popularity - a.popularity;
-  }), [allConcepts, sort]);
-  const mostBacked = [...allConcepts].sort((a, b) => b.supporters - a.supporters).slice(0, 5);
-  const watched = [...allConcepts].sort((a, b) => b.watchers - a.watchers).slice(0, 4);
-  const ambitious = allConcepts.filter((concept) => concept.ambition === "INFRASTRUCTURE" || concept.ambition === "AMBITIOUS").slice(0, 4);
-  const different = allConcepts.filter((concept) => concept.tone === "WILD" || concept.tone === "CONSUMER").slice(0, 4);
-
+  const { allConcepts, watchedConceptIds, getBackingTotal } = useMarketplace();
+  const { language } = useLanguage();
+  const c = (en: string, zh: string) => (language === "zh" ? zh : en);
+  const [sort, setSort] = useState("trending");
+  const [query, setQuery] = useState("");
+  const [filter, setFilter] = useState("all");
+  const filtered = useMemo(
+    () =>
+      allConcepts.filter(
+        (p) =>
+          (!query ||
+            `${p.name} ${p.tagline} ${p.tags.join(" ")}`
+              .toLowerCase()
+              .includes(query.toLowerCase())) &&
+          (filter === "all" ||
+            (filter === "watched"
+              ? watchedConceptIds.includes(p.id)
+              : filter === "ambitious"
+                ? p.ambition === "INFRASTRUCTURE" || p.ambition === "AMBITIOUS"
+                : p.isUserCreated)),
+      ),
+    [allConcepts, filter, query, watchedConceptIds],
+  );
+  const sorted = [...filtered].sort((a, b) =>
+    sort === "newest"
+      ? b.createdAt.localeCompare(a.createdAt)
+      : sort === "backed"
+        ? getBackingTotal(b.id) - getBackingTotal(a.id)
+        : b.popularity - a.popularity,
+  );
   return (
     <>
-      <div className="market-toolbar" style={{ marginBottom: 24 }}>
-        <span className="result-count">{allConcepts.length} speculative concepts</span>
-        <select className="select-input" value={sort} onChange={(event) => setSort(event.target.value as SortOption)} aria-label="Sort future concepts">
-          <option value="trending">Trending</option><option value="newest">Recently imagined</option><option value="most-collected">Most watched</option><option value="most-backed">Most backed</option><option value="alphabetical">Alphabetical</option>
+      <section className="future-market-hero">
+        <div>
+          <span className="section-overline">
+            <FlaskConical size={14} />{" "}
+            {c("The market for what comes next", "为尚未实现的可能，开一家店")}
+          </span>
+          <h1>{c("Tomorrow has a wishlist.", "未来，也有一张愿望清单。")}</h1>
+          <p>
+            {c(
+              "A memory that travels with you. Agents that work together. Discover the capabilities you wish existed, and put your Tokens behind them.",
+              "随身携带的记忆，彼此协作的智能体。发现那些你希望存在的能力，用 Token 为它们投一票。",
+            )}
+          </p>
+          <Link className="button button-future" href="/concepts/new">
+            <Sparkles size={16} />
+            {c("Imagine a new capability", "发布你的未来想象")}
+          </Link>
+        </div>
+        <div className="future-orb" aria-hidden="true">
+          <FlaskConical size={92} strokeWidth={0.8} />
+          <span>What if?</span>
+        </div>
+      </section>
+      <div className="future-market-note">
+        <Sparkles size={17} />
+        <span>
+          {c(
+            "Every item is an unbuilt concept. Support uses demo Tokens; market rankings and seed totals are illustrative.",
+            "这里的每件商品都是尚未实现的概念。支持使用体验 Token，初始排行与支持量为示例数据。",
+          )}
+        </span>
+      </div>
+      <div className="department-bar">
+        <div
+          className="department-tabs"
+          role="group"
+          aria-label={c("Concept collection", "概念分类")}
+        >
+          {[
+            ["all", c("All possibilities", "全部可能")],
+            ["ambitious", c("Big ambitions", "大胆构想")],
+            ["watched", c("My watchlist", "我的关注")],
+            ["mine", c("My concepts", "我的概念")],
+          ].map(([id, name]) => (
+            <button
+              key={id}
+              aria-pressed={filter === id}
+              onClick={() => setFilter(id)}
+            >
+              {name}
+            </button>
+          ))}
+        </div>
+        <select
+          aria-label={c("Sort concepts", "概念排序")}
+          value={sort}
+          onChange={(e) => setSort(e.target.value)}
+        >
+          <option value="trending">{c("Editor's order", "编辑推荐")}</option>
+          <option value="newest">{c("Recently imagined", "最新想象")}</option>
+          <option value="backed">
+            {c("Most demo support", "体验支持最多")}
+          </option>
         </select>
       </div>
-      <ConceptGrid concepts={sorted.slice(0, 12)} />
-      <section className="section-border page-section"><SectionHeader eyebrow="Recently imagined" title="New signals from the lab" description="Fresh concepts, including ideas published locally in this browser." href="/concepts/new" linkLabel="Imagine something" /><ConceptGrid concepts={[...allConcepts].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).slice(0, 4)} /></section>
-      <section className="page-section"><SectionHeader eyebrow="Collective support" title="Most backed" description="The ideas with the strongest simulated credit support." /><div className="rank-list">{mostBacked.map((concept, index) => <ConceptRankItem concept={concept} rank={index + 1} key={concept.id} />)}</div></section>
-      <section className="section-border page-section"><SectionHeader eyebrow="Most watched" title="Signals from the edge" description="Concepts builders are keeping an eye on." /><ConceptGrid concepts={watched} /></section>
-      <section className="page-section"><SectionHeader eyebrow="Infrastructure" title="Most technically ambitious" description="Protocols and systems designed to become invisible foundations." /><ConceptGrid concepts={ambitious} /></section>
-      <section className="section-border page-section"><SectionHeader eyebrow="Different tones" title="Weird, small, and consumer ideas" description="Not every useful capability has to be enterprise infrastructure." /><ConceptGrid concepts={different} /></section>
+      <label className="future-search">
+        <Search size={17} />
+        <input
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder={c(
+            "Find an idea: memory, identity, agents…",
+            "搜索概念：memory、identity、agents…",
+          )}
+          aria-label={c("Search concepts", "搜索概念")}
+        />
+        <span>{sorted.length}</span>
+      </label>
+      {sorted.length ? (
+        <div className="grid-products">
+          {sorted.map((p) => (
+            <ConceptCard key={p.id} concept={p} />
+          ))}
+        </div>
+      ) : (
+        <div className="empty-state">
+          <div>
+            <h2>
+              {c("An idea could start here.", "一个好想法，可以从这里开始。")}
+            </h2>
+            <p>
+              {c(
+                "Try another search, follow a concept, or create your own.",
+                "换个关键词，关注一个概念，或者亲手创造你的想法。",
+              )}
+            </p>
+            <button
+              className="button"
+              onClick={() => {
+                setFilter("all");
+                setQuery("");
+              }}
+            >
+              {c("Show all concepts", "查看全部概念")}
+            </button>
+            <Link className="button button-future" href="/concepts/new">
+              {c("Create a concept", "创建概念")}
+              <ArrowUpRight size={14} />
+            </Link>
+          </div>
+        </div>
+      )}
     </>
   );
 }
-
