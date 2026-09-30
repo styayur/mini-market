@@ -157,6 +157,16 @@ Run with Node.js 24 and `npm ci && npm run dev`. Validate with `npm test`, `npx 
 
 This is a local prototype: no real payments, crypto assets, inference credits, provider access, server accounts, or cross-device synchronization. Wallets, orders and collections live in browser storage. Use official provider documentation for current service details.
 
+## 参与开发与反馈 / Contributing
+
+- **GitHub Issues**：可复现错误和范围明确的功能请求。
+- **GitHub Discussions**：暂未启用；设计讨论可先使用 Discord。
+- **Discord**：[加入社区](https://discord.gg/wA2xy6VPK)，用于快速交流、早期反馈和项目讨论；它不是 SLA 支持渠道。
+- **Security**：安全问题请按 [SECURITY.md](SECURITY.md) 私下报告，不要开公开 Issue。
+- **Contributing**：开发环境、simulation-only 边界和提交检查见 [CONTRIBUTING.md](CONTRIBUTING.md)。
+
+Token、钱包、订单、收据和购买流程均为体验模拟，不代表真实支付、加密货币、API 额度或资产权益。
+
 ## 许可证 / License
 
 [GNU General Public License v3.0](LICENSE).

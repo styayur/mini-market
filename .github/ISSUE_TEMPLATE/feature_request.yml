@@ -1,0 +1,30 @@
+name: Feature request
+description: Propose a scoped Mini Market experience or engineering improvement.
+title: '[Feature]: '
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: User problem
+      description: What is confusing, inaccessible, or missing today?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed change
+    validations:
+      required: true
+  - type: textarea
+    id: boundaries
+    attributes:
+      label: Product boundaries
+      description: Explain any effect on the simulation-only status, local browser storage, static export, or provider claims.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: References or screenshots
+    validations:
+      required: false

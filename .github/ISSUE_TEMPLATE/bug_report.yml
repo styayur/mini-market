@@ -1,0 +1,60 @@
+name: Bug report
+description: Report a reproducible Mini Market problem.
+title: '[Bug]: '
+body:
+  - type: input
+    id: version
+    attributes:
+      label: Version or commit
+      description: Use the website footer if shown, or the Git commit/date tested.
+      placeholder: main @ 2026-10-01
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Browser and operating system
+      placeholder: Chrome 141 on Windows 11
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction steps
+      placeholder: |
+        1. Open ...
+        2. Select ...
+        3. Observe ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behaviour
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behaviour
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Logs or screenshots
+      description: Remove account details, private text, credentials, and local paths before posting.
+      render: text
+    validations:
+      required: false
+  - type: checkboxes
+    id: boundaries
+    attributes:
+      label: Scope check
+      options:
+        - label: I understand that Tokens, orders, wallet balances, and receipts are simulation-only and have no real financial value.
+          required: true
+        - label: I removed private or sensitive data from this report.
+          required: true
+        - label: This is not a security vulnerability. I will follow SECURITY.md for security reports.
+          required: true
