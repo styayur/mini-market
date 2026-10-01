@@ -6,6 +6,8 @@
 
 **A simulation-only marketplace for real AI capabilities and speculative futures.**
 
+**Status:** ⚪ Experimental
+
 [Live Demo](https://styayur.github.io/mini-market/) · [Documentation](README.md#本地开发) · [Issues](https://github.com/styayur/mini-market/issues)
 
 [![CI](https://github.com/styayur/mini-market/actions/workflows/ci.yml/badge.svg)](https://github.com/styayur/mini-market/actions/workflows/ci.yml)
@@ -168,6 +170,24 @@ The refreshed experience includes a collectible-pass storefront, quick add, star
 Run with Node.js 24 and `npm ci && npm run dev`. Validate with `npm test`, `npx tsc --noEmit`, `npm run lint`, and `npm run build`. The app exports static files to `out/` for GitHub Pages. Browser regression tests live in `tests/storefront.spec.py` and accept `BASE_URL` and `BROWSER_CHANNEL` environment variables.
 
 This is a local prototype: no real payments, crypto assets, inference credits, provider access, server accounts, or cross-device synchronization. Wallets, orders and collections live in browser storage. Use official provider documentation for current service details.
+
+## Roadmap
+
+### Current
+
+- Simulation-only storefront with browser-storage wallets, orders, and receipts.
+
+### Next
+
+- More speculative capability cards and an accessibility pass.
+
+### Future
+
+- Design-research writeups on marketplace boundaries.
+
+### Not planned
+
+- Real payments, crypto assets, API credits, provider accounts, or cross-device sync.
 
 ## 参与开发与反馈 / Contributing
 
