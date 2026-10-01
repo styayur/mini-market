@@ -1,10 +1,22 @@
+<div align="center">
+
+<img src="docs/assets/brand/logo-mark.svg" width="84" alt="Mini Market logo" />
+
 # Mini Market
 
-**把灵感装进购物袋。** 一家使用体验 Token 的 AI 能力商店，让发现、挑选、付款、收下新能力成为一段完整的购物体验，也为尚未实现的技术开出一张未来愿望清单。
+**A simulation-only marketplace for real AI capabilities and speculative futures.**
 
-[在线体验](https://styayur.github.io/mini-market/) · [GitHub](https://github.com/styayur/mini-market) · [English](#english)
+[Live Demo](https://styayur.github.io/mini-market/) · [Documentation](README.md#本地开发) · [Issues](https://github.com/styayur/mini-market/issues)
 
-![Mini Market 能力商店首页](docs/storefront.png)
+[![CI](https://github.com/styayur/mini-market/actions/workflows/ci.yml/badge.svg)](https://github.com/styayur/mini-market/actions/workflows/ci.yml)
+[![license: GPL-3.0](https://img.shields.io/badge/license-GPL--3.0-blue)](LICENSE)
+[![Next.js](https://img.shields.io/badge/Next.js-black?logo=nextdotjs&logoColor=white)]()
+[![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white)]()
+[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-222222?logo=githubpages&logoColor=white)]()
+
+![Mini Market storefront](docs/storefront.png)
+
+</div>
 
 ## 为什么做这个市场
 
