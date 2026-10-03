@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "codeforge_version": "0.2.1",
+  "entries": [
+    {
+      "fingerprint": "03771d0106624398b4358b1210bc0f011735968655aac0fab03b2deeda591076",
+      "rule_id": "PY-MAINTAINABILITY-001",
+      "path": "tests/commerce-browser.spec.py",
+      "symbol": null,
+      "context_hash": null,
+      "source_context": "test",
+      "disposition": "false_positive",
+      "reason": "Finding is in test, fixture, generated, vendor, or build-only content.",
+      "first_seen": "2026-10-03T15:27:59.0874876+08:00",
+      "last_reviewed": "2026-10-03T09:30:14.998539Z",
+      "rule_version": "0.2.1",
+      "lifecycle": "active"
+    },
+    {
+      "fingerprint": "14adb32a67c1c26a96e3f73c3c9db1de81a9838cd976a0a45da147e214010b79",
+      "rule_id": "PY-MAINTAINABILITY-001",
+      "path": "tests/storefront.spec.py",
+      "symbol": null,
+      "context_hash": null,
+      "source_context": "test",
+      "disposition": "false_positive",
+      "reason": "Finding is in test, fixture, generated, vendor, or build-only content.",
+      "first_seen": "2026-10-03T15:27:59.0875573+08:00",
+      "last_reviewed": "2026-10-03T09:30:14.998539Z",
+      "rule_version": "0.2.1",
+      "lifecycle": "active"
+    }
+  ]
+}
