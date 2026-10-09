@@ -1,7 +1,3 @@
-<div align="center">
-
-<img src="docs/assets/brand/logo-mark.svg" width="84" alt="Mini Market logo" />
-
 # Mini Market
 
 **A simulation-only marketplace for real AI capabilities and speculative futures.**
@@ -12,13 +8,9 @@
 
 [![CI](https://github.com/styayur/mini-market/actions/workflows/ci.yml/badge.svg)](https://github.com/styayur/mini-market/actions/workflows/ci.yml)
 [![license: MPL-2.0](https://img.shields.io/badge/license-MPL--2.0-blue)](LICENSE)
-[![Next.js](https://img.shields.io/badge/Next.js-black?logo=nextdotjs&logoColor=white)]()
-[![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white)]()
-[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-222222?logo=githubpages&logoColor=white)]()
 
 ![Mini Market storefront](docs/storefront.png)
 
-</div>
 
 ## 为什么做这个市场
 
