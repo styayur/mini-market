@@ -1,0 +1,14 @@
+[commands.lint]
+program = "npm"
+args = ["run", "lint"]
+timeout_secs = 300
+
+[commands.test]
+program = "npm"
+args = ["test"]
+timeout_secs = 600
+
+[commands.build]
+program = "npm"
+args = ["run", "build"]
+timeout_secs = 900
