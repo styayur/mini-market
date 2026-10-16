@@ -1,10 +1,16 @@
 # Mini Market
 
-**把灵感装进购物袋。** 一家使用体验 Token 的 AI 能力商店，让发现、挑选、付款、收下新能力成为一段完整的购物体验，也为尚未实现的技术开出一张未来愿望清单。
+**A simulation-only marketplace for real AI capabilities and speculative futures.**
 
-[在线体验](https://styayur.github.io/mini-market/) · [GitHub](https://github.com/styayur/mini-market) · [English](#english)
+**Status:** ⚪ Experimental
 
-![Mini Market 能力商店首页](docs/storefront.png)
+[Live Demo](https://styayur.github.io/mini-market/) · [Documentation](README.md#本地开发) · [Issues](https://github.com/styayur/mini-market/issues)
+
+[![CI](https://github.com/styayur/mini-market/actions/workflows/ci.yml/badge.svg)](https://github.com/styayur/mini-market/actions/workflows/ci.yml)
+[![license: MPL-2.0](https://img.shields.io/badge/license-MPL--2.0-blue)](LICENSE)
+
+![Mini Market storefront](docs/storefront.png)
+
 
 ## 为什么做这个市场
 
@@ -157,6 +163,24 @@ Run with Node.js 24 and `npm ci && npm run dev`. Validate with `npm test`, `npx 
 
 This is a local prototype: no real payments, crypto assets, inference credits, provider access, server accounts, or cross-device synchronization. Wallets, orders and collections live in browser storage. Use official provider documentation for current service details.
 
+## Roadmap
+
+### Current
+
+- Simulation-only storefront with browser-storage wallets, orders, and receipts.
+
+### Next
+
+- More speculative capability cards and an accessibility pass.
+
+### Future
+
+- Design-research writeups on marketplace boundaries.
+
+### Not planned
+
+- Real payments, crypto assets, API credits, provider accounts, or cross-device sync.
+
 ## 参与开发与反馈 / Contributing
 
 - **GitHub Issues**：可复现错误和范围明确的功能请求。
@@ -169,4 +193,4 @@ Token、钱包、订单、收据和购买流程均为体验模拟，不代表真
 
 ## 许可证 / License
 
-[GNU General Public License v3.0](LICENSE).
+[Mozilla Public License 2.0](LICENSE).
