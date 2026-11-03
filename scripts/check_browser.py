@@ -71,6 +71,10 @@ def main():
             assert order['id'] in receipt and 'OpenAI API' in receipt and '480' in receipt
             page.screenshot(path=str(output / 'checkout.png'), full_page=True)
             page.get_by_role('link', name='Open my collection', exact=True).click()
+            # The receipt also names the product: wait for the actual route
+            # before checking it or reloading, rather than accepting old text.
+            expect(page).to_have_url(re.compile(re.escape(origin) + r'/library/?$'))
+            expect(page.locator('.purchase-success')).to_have_count(0)
             expect(page.locator('main')).to_contain_text('OpenAI API')
             page.reload(wait_until='networkidle')
             expect(page.locator('main')).to_contain_text('OpenAI API')
