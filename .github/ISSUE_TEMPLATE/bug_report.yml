@@ -1,5 +1,5 @@
 name: Bug report
-description: Report a reproducible Mini Market problem.
+description: Report a reproducible Fitimart problem.
 title: '[Bug]: '
 body:
   - type: input

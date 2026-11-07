@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+  <title>Fixture Atom Project</title>
+  <link href="https://example.org/project/" rel="alternate" />
+  <updated>2026-11-05T12:00:00Z</updated>
+  <entry>
+    <id>tag:example.org,2026:project-7</id>
+    <title>Open source provenance layer</title>
+    <link href="https://example.org/project/provenance" rel="alternate" />
+    <published>2026-11-05T10:00:00Z</published>
+    <author><name>Lin Fixture</name></author>
+    <summary type="html">&lt;p&gt;A project about source records.&lt;/p&gt;&lt;script&gt;alert(1)&lt;/script&gt;</summary>
+  </entry>
+</feed>

@@ -1,4 +1,4 @@
-name: CI
+name: Fitimart CI
 
 on:
   push:
@@ -16,7 +16,7 @@ concurrency:
 jobs:
   verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v7
@@ -26,25 +26,34 @@ jobs:
       - run: npm ci
       - name: Dependency security audit
         run: npm audit --audit-level=high
-      - name: Unit tests
+      - name: Unit, parser, migration, and service tests
         run: npm test
       - name: Type check
-        run: npx tsc --noEmit
+        run: npm run typecheck
       - name: Lint
         run: npm run lint
-      - name: Static export
+      - name: Static export at root
         run: npm run build
       - uses: actions/setup-python@v7
         with:
           python-version: '3.12'
-      - name: Accept the built demo checkout in Chromium
+      - name: Install browser test tooling
         run: |
           python -m pip install -r scripts/requirements-browser.txt
           python -m playwright install --with-deps chromium
-          python scripts/check_browser.py
+      - name: Offline browser acceptance and legacy migration
+        run: python scripts/check_browser.py
+      - name: Static export under GitHub Pages subpath
+        env:
+          NEXT_PUBLIC_BASE_PATH: /fitimart
+        run: npm run build
+      - name: GitHub Pages subpath acceptance
+        run: python tests/pages-subpath.spec.py
       - uses: actions/upload-artifact@v7
         if: always()
         with:
-          name: dependency-browser
-          path: work/dependency-browser/
-          if-no-files-found: error
+          name: fitimart-browser-evidence
+          path: |
+            work/dependency-browser/
+            work/live-feeds/
+          if-no-files-found: warn

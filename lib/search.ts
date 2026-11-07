@@ -1,4 +1,5 @@
 import type { Concept, Product } from "@/types/marketplace";
+import { compareAtomic } from "./money.ts";
 
 function normalize(value: string) {
   return value.toLowerCase().replace(/[^\p{L}\p{N}\s-]/gu, " ");
@@ -85,9 +86,9 @@ export function filterAndSortProducts(
   return [...filtered].sort((a, b) => {
     switch (filters.sort) {
       case "price-low":
-        return a.demoPrice - b.demoPrice;
+        return compareAtomic(a.priceAtomic, b.priceAtomic);
       case "price-high":
-        return b.demoPrice - a.demoPrice;
+        return compareAtomic(b.priceAtomic, a.priceAtomic);
       case "newest":
         return (
           new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()

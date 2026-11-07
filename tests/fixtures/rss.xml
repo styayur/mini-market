@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Fixture Research Notes</title>
+    <link>https://example.org/notes/</link>
+    <language>en</language>
+    <item>
+      <guid isPermaLink="false">research-001</guid>
+      <title>Exact money for tiny markets</title>
+      <link>https://example.org/notes/exact-money?utm_source=test</link>
+      <pubDate>Tue, 03 Nov 2026 08:00:00 GMT</pubDate>
+      <dc:creator>Ada Example</dc:creator>
+      <category>Research</category>
+      <description><![CDATA[<p>Exact accounting matters.</p><script>alert('xss')</script>]]></description>
+    </item>
+    <item>
+      <guid isPermaLink="false">idea-002</guid>
+      <title>A feed-native collection</title>
+      <link>https://example.org/notes/feed-collection</link>
+      <pubDate>Wed, 04 Nov 2026 10:30:00 GMT</pubDate>
+      <description>An idea for collecting public discoveries.</description>
+    </item>
+  </channel>
+</rss>

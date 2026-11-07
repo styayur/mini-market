@@ -1,4 +1,5 @@
 import type { Concept, ProductType } from "@/types/marketplace";
+import { parseAmountToAtomic } from "@/lib/money";
 
 type ConceptSeed = {
   slug: string;
@@ -27,7 +28,7 @@ type ConceptSeed = {
 const icons: Record<ProductType, string> = {
   API: "braces", TOKEN: "diamond", EXTENSION: "grid", PLUGIN: "puzzle",
   MCP: "connector", MODEL: "brain", AGENT: "bot", DATASET: "database",
-  PROTOCOL: "arrows", TOOL: "wrench",
+  PROTOCOL: "arrows", TOOL: "wrench", ARTICLE: "pen", PUBLICATION: "layers", RESEARCH: "database", PROJECT: "code", IDEA: "spark", VIRTUAL_GOOD: "diamond",
 };
 
 function makeConcept(seed: ConceptSeed): Concept {
@@ -35,10 +36,10 @@ function makeConcept(seed: ConceptSeed): Concept {
   const id = seed.slug;
   return {
     id, slug: seed.slug, name: seed.name, type: seed.type, status: "FUTURE",
-    provider: "Mini Market Futures", tagline: seed.description, description: seed.description,
+    provider: "Fitimart Futures", tagline: seed.description, description: seed.description,
     icon, tags: seed.tags, capabilities: seed.capabilities, version: "Proposal 0.1",
     endpoint: `concept://${seed.slug}`, documentationUrl: undefined,
-    pricing: { model: "UNKNOWN", unit: "not implemented" }, demoPrice: 0,
+    pricing: { model: "UNKNOWN", unit: "not implemented" }, priceAtomic: parseAmountToAtomic(0),
     availability: "CONCEPT", verified: false, popularity: seed.popularity,
     watchers: seed.watchers, supporters: seed.supporters,
     relatedProductIds: seed.relatedProductIds ?? [], relatedConceptIds: seed.relatedConceptIds ?? [],
@@ -52,8 +53,8 @@ function makeConcept(seed: ConceptSeed): Concept {
     }],
     businessModel: seed.businessModel ?? "Usage-based infrastructure fees, with a shared open specification and optional managed service.",
     limitations: seed.limitations,
-    creator: { id: "mini-market-futures", name: "Mini Market Futures" },
-    backingCredits: seed.supporters * 12, ambition: seed.ambition ?? "FOCUSED", tone: seed.tone ?? "PRACTICAL",
+    creator: { id: "fitimart-futures", name: "Fitimart Futures" },
+    backingAtomic: parseAmountToAtomic(seed.supporters * 12), origin: { kind: "CURATED", label: "Fitimart future concepts" }, ambition: seed.ambition ?? "FOCUSED", tone: seed.tone ?? "PRACTICAL",
   };
 }
 

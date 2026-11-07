@@ -8,7 +8,7 @@ import { ConceptCard } from "@/components/concept/concept-card";
 import { ProductIcon } from "@/components/product/product-icon";
 import { ProductCard } from "@/components/product/product-card";
 import { products } from "@/data/products";
-import { formatCompactNumber, formatCredits } from "@/lib/format";
+import { formatCompactNumber, formatNumber } from "@/lib/format";
 
 export function ConceptDetail({ slug }: { slug: string }) {
   const { allConcepts, hydrated } = useMarketplace();
@@ -175,7 +175,7 @@ export function ConceptDetail({ slug }: { slug: string }) {
             </div>
             <div className="meta-row">
               <dt>Supporters</dt>
-              <dd>{formatCredits(concept.supporters)}</dd>
+              <dd>{formatNumber(concept.supporters)}</dd>
             </div>
             <div className="meta-row">
               <dt>Status</dt>

@@ -1,4 +1,4 @@
-name: Deploy Mini Market to GitHub Pages
+name: Deploy Fitimart to GitHub Pages
 
 on:
   push:
@@ -17,36 +17,29 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 25
     steps:
       - name: Checkout
         uses: actions/checkout@v7
-
       - name: Setup Node
         uses: actions/setup-node@v7
         with:
           node-version: 24
           cache: npm
-
       - name: Install dependencies
         run: npm ci
-
+      - name: Unit tests
+        run: npm test
       - name: Type check
         run: npx tsc --noEmit
-
-      - name: Test settlement
-        run: npm test
-
       - name: Lint
         run: npm run lint
-
-      - name: Build static site
+      - name: Build static site for the repository subpath
         env:
           NEXT_PUBLIC_BASE_PATH: /${{ github.event.repository.name }}
         run: npm run build
-
       - name: Configure Pages
         uses: actions/configure-pages@v5
-
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v5
         with:

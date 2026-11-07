@@ -1,0 +1,16 @@
+{
+  "ok": true,
+  "checks": [
+    "fresh profile exact purchase, coin animation, receipt, duplicate-click guard",
+    "browser language detection, manual override persistence, safe initial-credit edit",
+    "feed URL safety validation without remote calls",
+    "legacy Mini Market profile migrated without resetting balances or history",
+    "responsive route checks at 390px and 768px",
+    "fresh zh-CN browser profile selected Chinese automatically"
+  ],
+  "remote_requests": [],
+  "page_errors": [],
+  "limits": [
+    "Offline build acceptance uses synthetic state; live feeds are tested separately by tests/live-feeds.spec.py."
+  ]
+}

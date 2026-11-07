@@ -1,0 +1,17 @@
+{
+  "version": "https://jsonfeed.org/version/1.1",
+  "title": "Fixture JSON Feed",
+  "home_page_url": "https://example.net/",
+  "language": "en",
+  "items": [
+    {
+      "id": "json-1",
+      "url": "https://example.net/posts/one?utm_campaign=test",
+      "title": "A public idea",
+      "content_text": "This is a deterministic JSON Feed fixture.",
+      "date_published": "2026-11-06T06:00:00Z",
+      "authors": [{ "name": "Rae Fixture" }],
+      "tags": ["idea", "marketplace"]
+    }
+  ]
+}

@@ -15,15 +15,17 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Mini Market — Collect Your Next Capability",
-    template: "%s · Mini Market",
+    default: "Fitimart — An RSS-powered simulated marketplace",
+    template: "%s · Fitimart",
   },
   description:
-    "Shop AI capability passes with demo Tokens. Discover real tools, collect new possibilities, and back ideas from the future.",
-  applicationName: "Mini Market",
+    "Collect articles, ideas, projects, and virtual goods from public RSS, Atom, and JSON Feeds in a local-first simulated economy.",
+  applicationName: "Fitimart",
   keywords: [
-    "AI marketplace",
-    "APIs",
+    "RSS marketplace",
+    "content discovery",
+    "JSON Feed",
+    "Atom",
     "MCP",
     "agents",
     "developer tools",
@@ -38,7 +40,7 @@ export default function RootLayout({
 }) {
   return (
     <html
-      lang="zh-CN"
+      lang="en"
       data-scroll-behavior="smooth"
       className={`${geistSans.variable} ${geistMono.variable}`}
     >

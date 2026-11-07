@@ -40,7 +40,7 @@ const types: ProductType[] = [
 export function ConceptLab() {
   const searchParams = useSearchParams();
   const { publishConcept } = useMarketplace();
-  const seed = searchParams.get("seed") ?? "";
+  const seed = searchParams?.get("seed") ?? "";
   const [idea, setIdea] = useState(
     seed
       ? `I wish there were a capability for ${seed.toLowerCase()}`
