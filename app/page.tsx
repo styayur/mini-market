@@ -21,9 +21,9 @@ import {
 import { ProductCard } from "@/components/product/product-card";
 import { useLanguage } from "@/components/providers/language-provider";
 import { useMarketplace } from "@/components/providers/marketplace-provider";
-import { products } from "@/data/products";
 import { concepts } from "@/data/concepts";
-import { formatCredits } from "@/lib/format";
+import { formatMoney } from "@/lib/format";
+import { addAtomic, compareAtomic } from "@/lib/money";
 
 const departments = [
   { id: "all", en: "For you", zh: "为你精选", icon: Sparkles },
@@ -37,7 +37,7 @@ const departments = [
 export default function Home() {
   const { language } = useLanguage();
   const c = (en: string, zh: string) => (language === "zh" ? zh : en);
-  const { credits, hydrated, addBundle, cartProductIds } = useMarketplace();
+  const { balanceAtomic, economy, hydrated, addBundle, cartProductIds, products, curatedProducts } = useMarketplace();
   const [department, setDepartment] = useState("all");
   const [sort, setSort] = useState("popular");
   const catalog = products
@@ -49,13 +49,13 @@ export default function Home() {
     )
     .sort((a, b) =>
       sort === "price"
-        ? a.demoPrice - b.demoPrice
+        ? compareAtomic(a.priceAtomic, b.priceAtomic)
         : sort === "new"
           ? b.createdAt.localeCompare(a.createdAt)
           : b.popularity - a.popularity,
     )
     .slice(0, 8);
-  const bundle = products.filter((p) =>
+  const bundle = curatedProducts.filter((p) =>
     ["openai-api", "anthropic-api", "google-gemini-api"].includes(p.id),
   );
   const bundleAdded = bundle.every((p) => cartProductIds.includes(p.id));
@@ -69,8 +69,8 @@ export default function Home() {
           </span>
           <span>
             {c(
-              "10,000 welcome Tokens. A whole new world to spend them in.",
-              "10,000 枚欢迎 Token，去买一点未来。",
+              `Starting credit: ${formatMoney(economy.initialCreditAtomic, economy, language)}. A simulated world to explore.`,
+              `初始额度：${formatMoney(economy.initialCreditAtomic, economy, language)}。去探索一个模拟世界。`,
             )}
           </span>
           <Link href="/dashboard">
@@ -142,7 +142,7 @@ export default function Home() {
             </div>
             <div className="capability-pass pass-front">
               <div className="pass-heading">
-                <span>mini market</span>
+                <span>fitimart</span>
                 <Sparkles size={21} />
               </div>
               <div className="token-sculpture">
@@ -189,7 +189,7 @@ export default function Home() {
             <Wallet size={21} />
             <span>
               <strong>
-                {c("Your first 10,000 are on us", "10,000 Token，入场即拥有")}
+                {c("Your virtual wallet is ready", "你的虚拟钱包已就绪")}
               </strong>
               <small>
                 {c(
@@ -324,8 +324,7 @@ export default function Home() {
           </div>
           <div className="collection-buy">
             <strong>
-              ◈ {formatCredits(bundle.reduce((sum, p) => sum + p.demoPrice, 0))}
-              <small> Token</small>
+              {formatMoney(bundle.reduce((sum, product) => addAtomic(sum, product.priceAtomic), "0"), economy, language)}
             </strong>
             <button
               className="button button-primary"
@@ -406,7 +405,7 @@ export default function Home() {
             </p>
           </div>
           <Link href="/dashboard" className="button button-lg">
-            ◈ {hydrated ? formatCredits(credits) : "—"} Token{" "}
+            {hydrated ? formatMoney(balanceAtomic, economy, language) : "—"}{" "}
             <ArrowRight size={16} />
           </Link>
         </section>

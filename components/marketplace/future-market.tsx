@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { ArrowUpRight, FlaskConical, Search, Sparkles } from "lucide-react";
 import { ConceptCard } from "@/components/concept/concept-card";
 import { useMarketplace } from "@/components/providers/marketplace-provider";
+import { compareAtomic } from "@/lib/money";
 import { useLanguage } from "@/components/providers/language-provider";
 
 export function FutureMarket() {
@@ -34,7 +35,7 @@ export function FutureMarket() {
     sort === "newest"
       ? b.createdAt.localeCompare(a.createdAt)
       : sort === "backed"
-        ? getBackingTotal(b.id) - getBackingTotal(a.id)
+        ? compareAtomic(getBackingTotal(b.id), getBackingTotal(a.id))
         : b.popularity - a.popularity,
   );
   return (

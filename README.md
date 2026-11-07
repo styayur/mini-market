@@ -1,84 +1,134 @@
-# Mini Market
+# Fitimart
 
-A simulation-only marketplace for exploring AI capabilities and speculative future concepts.
+**A static-first, RSS-powered content marketplace with a configurable virtual economy.**
 
-[简体中文](README.zh-CN.md) · [Live demo](https://styayur.github.io/mini-market/) · [Issues](https://github.com/styayur/mini-market/issues)
+[简体中文](README.zh-CN.md) · [Live demo](https://styayur.github.io/fitimart/) · [Roadmap](https://github.com/styayur/fitimart/issues/25) · [Documentation](docs/ARCHITECTURE.md)
 
-**Experimental.** Tokens are free demo units. Purchases grant no real API access, inference credits, subscriptions, cryptocurrency or asset rights. Product capabilities/prices are a hand-maintained catalogue snapshot; consult the provider for current service facts. Future concepts and initial support metrics are illustrative, with no delivery promise.
+**Fitimart is simulation-only.** It does not process real money, sell real provider access, create cryptocurrency, or grant ownership rights. Public feeds, CORS proxies, and machine translation are third-party best-effort services with their own availability, limits, and privacy policies.
 
-![Existing Mini Market storefront with capability passes and shopping controls](docs/storefront.png)
+![Fitimart live RSS subscription acceptance](docs/evidence/live-feeds.png)
 
-## Try the experience
+## What changed in v0.2.0-alpha.1
 
-Start with 10,000 demo Tokens, browse passes or starter bundles, add 1–99 of each pass, review the bag and check out. Insufficient balance can be topped up for free. Save a text receipt and inspect orders, collection quantities and wallet history. Watch/support speculative concepts or create a local concept in the concept lab.
+- Rename and identity migration from Mini Market to **Fitimart**.
+- RSS 2.0, Atom, and JSON Feed subscriptions with stable deduplication.
+- Client-side direct fetch plus configurable public CORS proxy fallbacks and IndexedDB cache recovery.
+- Feed-item product origin metadata and a dedicated subscription manager.
+- Exact BigInt-backed six-decimal monetary accounting with serialized string amounts.
+- Configurable initial credit, ISO 4217/custom display units, precision, and currency pattern.
+- Browser-language detection, explicit language override, English/Simplified Chinese UI, and optional MyMemory translation.
+- Gold-coin purchase celebration, animated balance, receipt, collection update, and duplicate-settlement guard.
+- Versioned storage migration from `mini-market-demo-v1`, user-data export/import, and recoverable migration backups.
+- Static GitHub Pages subpath verification and scheduled live-service acceptance.
 
-Primary shopping flows support Chinese and English; technical catalogue text and some editor screens remain English. The design includes keyboard focus, Escape handling, narrow layouts and reduced-motion preferences.
+## Try it
 
-All wallets, orders, collections and locally created concepts live in the current browser. Clearing storage or resetting settings deletes that local experience; there is no account, shared inventory or cross-device sync. If storage is disabled, only the current page session works. Tabs have no transaction lock and the app must not be used for real commerce.
+1. Open **Feeds** and subscribe to a public RSS, Atom, or JSON Feed.
+2. Review imported entries, provenance, source language, and optional machine translation.
+3. Add a curated or imported item to the bag and complete the simulated checkout.
+4. Inspect the exact receipt, collection, wallet activities, language preference, and economy settings.
 
-## Develop and test
+A fresh wallet starts with **1,000,000,000,000 USD (10^12)** in virtual credit. Changing the initial-credit setting affects future wallet initialization only. Resetting the current wallet is an explicit, recorded action.
 
-Use Node.js 24, as in CI:
+## Simulation boundary
+
+- Every balance, order, receipt, top-up, and backing is local simulation data.
+- No real payment gateway, account, financial instrument, provider entitlement, or conversion rate is involved.
+- Changing the display currency never converts the balance or invents an exchange rate.
+- Feed content remains attributed to its publisher. A simulated pass does not unlock paid content or real services.
+- Public proxy providers and MyMemory may see requested URLs or submitted text under their own policies.
+
+## Development
+
+Use Node.js 24, matching CI:
 
 ```sh
-git clone https://github.com/styayur/mini-market.git
-cd mini-market
+git clone https://github.com/styayur/fitimart.git
+cd fitimart
 npm ci
 npm run dev
 ```
 
-Open `http://localhost:3000`. From the root:
+Run the complete local verification:
 
 ```sh
 npm test
-npx tsc --noEmit
+npm run typecheck
 npm run lint
 npm run build
-```
-
-The build statically exports `out/`; `next start` is not the preview command for this export. For a root-path export:
-
-```sh
-python -m http.server 3001 --directory out
-```
-
-Optional browser regression tests require a running app plus Python Playwright:
-
-```sh
-python -m pip install playwright
+python -m pip install -r scripts/requirements-browser.txt
 python -m playwright install chromium
+python scripts/check_browser.py
 ```
 
-The scripts default to installed Microsoft Edge. To use downloaded Chromium in PowerShell:
+Live-service acceptance is intentionally separate and is not used as a deterministic fixture test:
 
-```powershell
-$env:BROWSER_CHANNEL = 'chromium'
-$env:BASE_URL = 'http://localhost:3000'
-python tests/storefront.spec.py
-python tests/commerce-browser.spec.py
+```sh
+npm run test:live
 ```
 
-Tests cover cart/checkout, duplicate-payment protection within the page, persistence, receipts, wallet/concept flows and responsive route overflow. Temporary captures go to `.qa/`. They verify a simulation, not real payments. See the [detailed reference](README.zh-CN.md#浏览器回归测试).
+It tests several public feeds, both configured proxy endpoints, RSS/Atom/JSON Feed import, marketplace creation, and one real MyMemory translation. Results vary with third-party availability and quotas.
 
-## Implementation and deployment
+### Static export and GitHub Pages
 
-Next.js 16, React 19, TypeScript and Tailwind CSS 4. `app/` defines static routes; `components/` implements storefront/concept/dashboard flows; `lib/commerce.ts` holds settlement rules and `lib/storage.ts` browser persistence. `data/` is maintained catalogue content. No payment provider, on-chain wallet or external AI call powers this demo.
-
-[CI](https://github.com/styayur/mini-market/actions/workflows/ci.yml) checks the source. [Pages deployment](.github/workflows/deploy-pages.yml) checks types, settlement tests, lint and build before publishing. For the hosted repository subpath:
+The build is a static export in `out/`. Preview it with any static file server, not `next start`:
 
 ```powershell
-$env:NEXT_PUBLIC_BASE_PATH = '/mini-market'
+$env:NEXT_PUBLIC_BASE_PATH = "/fitimart"
 npm run build
+python tests/pages-subpath.spec.py
 ```
 
-Serve that output at `/mini-market/`, rather than treating it as a root-path export. Existing browser checks and [Chinese development/deployment notes](README.zh-CN.md#github-pages) describe the subpath boundary.
+The Pages workflow deploys on a push to `main`. Production URL: <https://styayur.github.io/fitimart/>.
 
-## Limits, roadmap and contributing
+## Architecture
 
-Balances, support counts and catalogue availability are not market data. There is no backend authority, multi-tab transaction isolation or real entitlement delivery. Further speculative cards, accessibility review and design-research notes are future work; real payments, API credits and provider accounts are outside scope.
+```text
+app/                         static routes, feed manager, imported product route
+components/                  UI and the client marketplace provider
+data/                        curated catalogue and future concepts
+lib/
+  money.ts                   exact fixed-point arithmetic and formatting
+  commerce.ts                pure settlement calculation
+  storage.ts                 schema v2, legacy migration, export/import
+  catalog-service.ts         curated + RSS + retained-item catalogue view
+  feed/
+    parser.ts                RSS 2.0, Atom, JSON Feed validation + parsing
+    proxy-service.ts         direct → proxy adapters → cache recovery
+    feed-cache.ts            IndexedDB raw-response cache
+    feed-service.ts          refresh policy, dedupe, status, backoff
+  translation/               replaceable providers and translation cache
+  services/                  wallet, order, collection, and storage services
+types/                       typed marketplace, feed, and economy models
+tests/                       deterministic fixtures and browser acceptance
+```
 
-Read [CONTRIBUTING.md](CONTRIBUTING.md), keep changes within the simulation boundary, and run applicable checks. Use [Issues](https://github.com/styayur/mini-market/issues) for reproductions; [SECURITY.md](SECURITY.md) covers private vulnerability reporting. Discussions is not enabled; informal community chat is optional and has no support SLA.
+Read [the architecture notes](docs/ARCHITECTURE.md), [RSS guide](docs/RSS.md), [proxy/provider notes](docs/PROXY-PROVIDERS.md), [translation notes](docs/TRANSLATION.md), [currency specification](docs/ECONOMY.md), and [migration report](docs/MIGRATION.md).
+
+## Data, privacy, and migration
+
+- Active state uses `fitimart-marketplace-v2`.
+- Legacy `mini-market-demo-v1` data is read and migrated without resetting balances, orders, favorites, watched concepts, collections, created concepts, or backings.
+- Raw feed responses are cached in IndexedDB; subscriptions and imported item metadata are versioned in local storage.
+- Feed URL validation blocks credentials, non-HTTP(S) schemes, localhost, private, and internal address literals.
+- Feed HTML is reduced to sanitized plain text before rendering. The app never injects imported HTML.
+- Export/import is available in **Settings**. JSON never contains raw BigInt values.
+- Clearing browser storage removes the local experience. There is no account, cross-device sync, or backend authority.
+
+## Known limitations
+
+- Public proxies and MyMemory have no uptime, latency, quota, or language-coverage guarantee.
+- Browser-side DNS rebinding cannot be fully solved by URL validation alone; do not subscribe to private endpoints.
+- Feed refresh only runs on demand or while an app tab is visible.
+- The alpha import surface keeps the newest 40 parsed entries per refresh and retains previously imported items in local state.
+- Interface localization currently ships English and Simplified Chinese; optional content translation depends on MyMemory coverage.
+- There is no multi-tab transaction lock, backend settlement authority, or real entitlement delivery.
+- Live acceptance results are point-in-time observations, not service commitments.
+
+## Contributing and security
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) and [SECURITY.md](SECURITY.md). Report exploitable issues privately. Do not put API keys, private feed URLs, or personal data into public proxy requests.
 
 ## License
 
-Source uses [MPL-2.0](LICENSE), the existing project-specific choice. Third-party services, names and catalogue links do not grant rights to their products.
+[Mozilla Public License 2.0](LICENSE). Third-party names and feed content remain subject to their owners' rights and terms.

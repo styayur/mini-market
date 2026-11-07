@@ -5,8 +5,6 @@ import type { Metadata } from "next";
 import { MarketplaceBrowser } from "@/components/marketplace/marketplace-browser";
 import { ProductCardSkeleton } from "@/components/ui/loading-state";
 import { categories } from "@/data/categories";
-import { concepts } from "@/data/concepts";
-import { products } from "@/data/products";
 
 export const metadata: Metadata = {
   title: "Marketplace",
@@ -26,7 +24,7 @@ export default function MarketplacePage() {
           </div>
         }
       >
-        <MarketplaceBrowser products={products} concepts={concepts} />
+        <MarketplaceBrowser />
       </Suspense>
       <section
         id="categories"

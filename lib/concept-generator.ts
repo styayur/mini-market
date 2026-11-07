@@ -1,5 +1,6 @@
 import type { Concept, ProductType } from "@/types/marketplace";
-import { slugify } from "@/lib/format";
+import { slugify } from "./format.ts";
+import { parseAmountToAtomic } from "./money.ts";
 
 type GeneratorOverrides = Partial<Pick<Concept, "name" | "type" | "description" | "problem" | "proposedCapabilities" | "targetUsers" | "useCases" | "businessModel" | "limitations" | "dependencies">>;
 
@@ -43,7 +44,7 @@ export function generateConcept(idea: string, overrides: GeneratorOverrides = {}
     description: overrides.description || `A proposed capability that turns the following unmet need into a concrete software interface: ${idea.trim()}.`,
     icon: type === "TOKEN" ? "diamond" : type === "PROTOCOL" ? "arrows" : "spark",
     tags, capabilities, version: "Draft 0.1", endpoint: `concept://${slug}`,
-    pricing: { model: "UNKNOWN", unit: "not implemented" }, demoPrice: 0,
+    pricing: { model: "UNKNOWN", unit: "not implemented" }, priceAtomic: parseAmountToAtomic(0),
     availability: "CONCEPT", verified: false, popularity: 42, watchers: 0, supporters: 0,
     relatedProductIds: [], relatedConceptIds: [], createdAt: new Date().toISOString().slice(0, 10),
     authModel: "Proposed consent and policy model", sdks: ["Hypothetical SDK"],
@@ -55,7 +56,7 @@ export function generateConcept(idea: string, overrides: GeneratorOverrides = {}
     businessModel: overrides.businessModel || "Usage-based managed service with a public specification.",
     dependencies: overrides.dependencies || ["identity and policy", "stable schemas", "audit storage"],
     limitations: overrides.limitations || ["The interface needs cross-vendor adoption.", "Trust and data-retention rules require careful design."],
-    creator: { id: "demo-user", name: "You" }, backingCredits: 0,
+    creator: { id: "demo-user", name: "You" }, backingAtomic: parseAmountToAtomic(0), origin: { kind: "USER", creatorId: "demo-user" },
     isUserCreated: true, tone: "PRACTICAL", ambition: "FOCUSED",
   };
 }
@@ -75,5 +76,3 @@ export function updateConceptFromIdea(concept: Concept, idea: string, overrides:
     ...overrides,
   });
 }
-
-

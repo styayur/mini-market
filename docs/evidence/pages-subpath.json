@@ -1,0 +1,13 @@
+{
+  "ok": true,
+  "date": "2026-11-07",
+  "basePath": "/fitimart",
+  "command": "NEXT_PUBLIC_BASE_PATH=/fitimart npm run build && python tests/pages-subpath.spec.py",
+  "checks": [
+    "static CSS and JavaScript assets resolve under /fitimart/_next/",
+    "home, marketplace, feeds, and settings routes load",
+    "query-based imported-product route remains within the subpath",
+    "responsive layout has no document overflow"
+  ],
+  "pageErrors": []
+}

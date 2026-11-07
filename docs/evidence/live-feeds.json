@@ -1,0 +1,52 @@
+{
+  "ok": true,
+  "baseUrl": "http://127.0.0.1:51387",
+  "feeds": [
+    {
+      "url": "https://hnrss.org/frontpage",
+      "title": "Hacker News RSS",
+      "itemRows": 6
+    },
+    {
+      "url": "https://github.blog/feed/",
+      "title": "GitHub Blog RSS",
+      "itemRows": 6
+    },
+    {
+      "url": "https://daringfireball.net/feeds/json",
+      "title": "Daring Fireball JSON Feed",
+      "itemRows": 6
+    },
+    {
+      "url": "https://github.com/atom/atom/releases.atom",
+      "title": "Atom Releases Feed",
+      "itemRows": 6
+    }
+  ],
+  "proxies": [
+    {
+      "id": "cors-dev",
+      "status": 200,
+      "contentType": "application/xml; charset=utf-8",
+      "ok": true
+    },
+    {
+      "id": "cors-tools",
+      "status": 200,
+      "contentType": "application/xml; charset=utf-8",
+      "ok": true
+    }
+  ],
+  "translation": {
+    "ok": true,
+    "provider": "MyMemory",
+    "ui": "translated text displayed"
+  },
+  "marketplaceRssProducts": 80,
+  "rssProductAddedToBag": "v1.63.1",
+  "pageErrors": [],
+  "limits": [
+    "Public proxies and MyMemory are third-party best-effort services; availability and quotas are not guaranteed.",
+    "Browser acceptance was performed only for the listed feeds at this run time."
+  ]
+}

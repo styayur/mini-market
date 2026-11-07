@@ -1,6 +1,8 @@
 import type { Product } from "@/types/marketplace";
+import { parseAmountToAtomic } from "@/lib/money";
+type ProductSeed = Omit<Product, "priceAtomic" | "origin"> & { demoPrice: number };
 
-export const products: Product[] = [
+const productSeeds: ProductSeed[] = [
   {
     id: "openai-api", slug: "openai-api", name: "OpenAI API", type: "API", status: "NOW",
     provider: "OpenAI", tagline: "General-purpose models for text, vision, audio, and tool use.",
@@ -209,6 +211,10 @@ export const products: Product[] = [
     authModel: "Access token and provider eligibility", sdks: ["Python", "JavaScript", "REST"], dependencies: ["Hugging Face account"],
   },
 ];
-
+export const products: Product[] = productSeeds.map(({ demoPrice, ...product }) => ({
+  ...product,
+  priceAtomic: parseAmountToAtomic(demoPrice),
+  origin: { kind: "CURATED", label: "Fitimart curated catalogue" },
+}));
 export const productMap = new Map(products.map((product) => [product.id, product]));
 export const productSlugMap = new Map(products.map((product) => [product.slug, product]));

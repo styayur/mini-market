@@ -1,5 +1,5 @@
 name: Feature request
-description: Propose a scoped Mini Market experience or engineering improvement.
+description: Propose a scoped Fitimart experience or engineering improvement.
 title: '[Feature]: '
 body:
   - type: textarea

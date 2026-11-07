@@ -9,7 +9,9 @@ import { ProductIcon } from "@/components/product/product-icon";
 import { ProductCard } from "@/components/product/product-card";
 import { concepts } from "@/data/concepts";
 import { productMap, productSlugMap, products } from "@/data/products";
-import { formatCompactNumber, formatCredits } from "@/lib/format";
+import { formatCompactNumber } from "@/lib/format";
+import { PriceDisplay } from "@/components/product/price-display";
+import { TranslatableText } from "@/components/feed/translatable-text";
 import { recommendConcepts, recommendProducts } from "@/lib/recommendations";
 
 type PageProps = { params: Promise<{ id: string }> };
@@ -39,7 +41,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
         <div>
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}><VerifiedBadge verified={product.verified} availability={product.availability} /><span className="badge">{product.type}</span><span className="badge">{product.provider}</span></div>
           <h1 className="page-title" style={{ marginTop: 22 }}>{product.name}</h1>
-          <p className="lead" style={{ maxWidth: 760, marginTop: 20 }}>{product.tagline}</p>
+          <div style={{ maxWidth: 760, marginTop: 20 }}><TranslatableText text={product.tagline} sourceLanguage="en" className="lead" /></div>
           <ProductActions product={product} />
         </div>
       </section>
@@ -53,7 +55,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
 
       <div className="detail-layout">
         <div>
-          <section className="copy-block" id="overview"><h2>Description</h2><p>{product.description}</p></section>
+          <section className="copy-block" id="overview"><h2>Description</h2><TranslatableText text={product.description} sourceLanguage="en" /></section>
           <section className="copy-block" id="capabilities" style={{ marginTop: 54 }}><h2>Capabilities</h2><div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>{product.capabilities.map((capability) => <span className="chip" key={capability}>{capability}</span>)}</div></section>
           <section className="copy-block" id="api" style={{ marginTop: 54 }}>
             <h2>API surface</h2>
@@ -64,14 +66,14 @@ export default async function ProductDetailPage({ params }: PageProps) {
             </div>
             <p style={{ marginTop: 16, fontSize: 12 }}>Never paste real API secrets into this demo. Use the official provider documentation for current authentication and safety guidance.</p>
           </section>
-          <section className="copy-block" id="pricing" style={{ marginTop: 54 }}><h2>Pricing</h2><p>{price}. Purchases in Mini Market are simulated with demo credits and are not official provider pricing.</p></section>
+          <section className="copy-block" id="pricing" style={{ marginTop: 54 }}><h2>Pricing</h2><p>{price}. Purchases in Fitimart are simulated with virtual credit and are not official provider pricing.</p></section>
         </div>
         <aside className="meta-panel">
           <div className="eyebrow" style={{ marginBottom: 12 }}>Technical record</div>
           <dl>
             <div className="meta-row"><dt>Provider</dt><dd>{product.provider}</dd></div><div className="meta-row"><dt>Version</dt><dd>{product.version ?? "Current"}</dd></div>
             <div className="meta-row"><dt>Availability</dt><dd>{product.availability}</dd></div><div className="meta-row"><dt>Popularity</dt><dd>{formatCompactNumber(product.popularity * 100)}</dd></div>
-            <div className="meta-row"><dt>Demo price</dt><dd>{formatCredits(product.demoPrice)} cr</dd></div>
+            <div className="meta-row"><dt>Simulated price</dt><dd><PriceDisplay amount={product.priceAtomic} /></dd></div>
           </dl>
           {product.documentationUrl && <a className="button button-sm" style={{ width: "100%", marginTop: 16 }} href={product.documentationUrl} target="_blank" rel="noreferrer"><ExternalLink size={13} /> Official documentation</a>}
           <div style={{ display: "flex", gap: 7, marginTop: 14, color: "var(--muted)", fontSize: 10, lineHeight: 1.5 }}><ShieldCheck size={14} /> Descriptions are intentionally conservative and may change at the provider.</div>

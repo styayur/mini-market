@@ -1,14 +1,13 @@
 "use client";
 
 import { useLanguage } from "@/components/providers/language-provider";
+import { useMarketplace } from "@/components/providers/marketplace-provider";
 import { useMemo, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Filter, Search, SlidersHorizontal } from "lucide-react";
 import { ProductCard } from "@/components/product/product-card";
 import { filterAndSortProducts } from "@/lib/search";
 import type {
-  Concept,
-  Product,
   ProductType,
   SortOption,
 } from "@/types/marketplace";
@@ -25,6 +24,12 @@ const productTypes: Array<ProductType | "ALL"> = [
   "DATASET",
   "PROTOCOL",
   "TOOL",
+  "ARTICLE",
+  "PUBLICATION",
+  "RESEARCH",
+  "PROJECT",
+  "IDEA",
+  "VIRTUAL_GOOD",
 ];
 const sortOptions: Array<{ value: SortOption; label: string }> = [
   { value: "trending", label: "Trending" },
@@ -36,14 +41,9 @@ const sortOptions: Array<{ value: SortOption; label: string }> = [
   { value: "price-high", label: "Price: high to low" },
 ];
 
-export function MarketplaceBrowser({
-  products,
-  concepts,
-}: {
-  products: Product[];
-  concepts: Concept[];
-}) {
+export function MarketplaceBrowser() {
   const router = useRouter();
+  const { products, allConcepts: concepts } = useMarketplace();
   const { language } = useLanguage();
   const c = (en: string, zh: string) => (language === "zh" ? zh : en);
   const sortLabels: Record<string, string> = {
@@ -62,16 +62,17 @@ export function MarketplaceBrowser({
   const status = searchParams.get("status") ?? "ALL";
   const type = searchParams.get("type") ?? "ALL";
   const tag = searchParams.get("tag") ?? "";
+  const source = searchParams.get("source") ?? "ALL";
   const sort = (searchParams.get("sort") as SortOption) || "trending";
 
   const allItems = useMemo(
     () => [...products, ...concepts],
     [products, concepts],
   );
-  const results = useMemo(
-    () => filterAndSortProducts(allItems, { query, status, type, tag, sort }),
-    [allItems, query, status, type, tag, sort],
-  );
+  const results = useMemo(() => {
+    const filtered = allItems.filter((item) => source === "ALL" || (source === "RSS" && item.origin.kind === "RSS") || (source === "CURATED" && item.origin.kind === "CURATED") || (source === "FUTURE" && item.status === "FUTURE"));
+    return filterAndSortProducts(filtered, { query, status, type, tag, sort });
+  }, [allItems, query, status, type, tag, sort, source]);
 
   const updateParam = (key: string, value: string) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -113,6 +114,10 @@ export function MarketplaceBrowser({
             </span>
           </button>
         ))}
+      </div>
+      <div className="filter-group">
+        <span className="filter-label">{c("Source", "来源")}</span>
+        {["ALL", "CURATED", "RSS", "FUTURE"].map((value) => <button className="filter-option" data-active={source === value} onClick={() => updateParam("source", value)} type="button" key={value}>{value === "ALL" ? c("All sources", "全部来源") : value === "CURATED" ? c("Curated", "精选") : value === "RSS" ? c("Subscribed feeds", "订阅内容") : c("Future concepts", "未来概念")}</button>)}
       </div>
       <div className="filter-group">
         <span className="filter-label">{c("Type", "商品类型")}</span>

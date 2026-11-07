@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { conceptHref } from "@/lib/links";
+import { conceptHref, productHref } from "@/lib/links";
 import {
   ArrowRight,
   ArrowUpRight,
@@ -19,11 +19,13 @@ import { useLanguage } from "@/components/providers/language-provider";
 import { ProductCard } from "@/components/product/product-card";
 import { ConceptCard } from "@/components/concept/concept-card";
 import { downloadReceipt } from "@/components/product/checkout-view";
-import { formatCredits } from "@/lib/format";
+import { formatDateTime, formatMoney } from "@/lib/format";
+import { multiplyAtomic, parseAmountToAtomic } from "@/lib/money";
 
 export function DashboardStats() {
   const {
-    credits,
+    balanceAtomic,
+    economy,
     libraryProductIds,
     createdConcepts,
     watchedConceptIds,
@@ -34,11 +36,14 @@ export function DashboardStats() {
     topUps,
     topUp,
     backings,
+    walletAdjustments,
   } = useMarketplace();
   const { language } = useLanguage();
   const c = (en: string, zh: string) => (language === "zh" ? zh : en);
-  const [amount, setAmount] = useState(1000);
+  const [amount, setAmount] = useState("1000");
   const [tab, setTab] = useState("orders");
+  let amountPreview = "0";
+  try { amountPreview = parseAmountToAtomic(amount); } catch { amountPreview = "0"; }
   const library = products.filter((p) => libraryProductIds.includes(p.id));
   const watched = allConcepts.filter((p) => watchedConceptIds.includes(p.id));
   return (
@@ -59,15 +64,14 @@ export function DashboardStats() {
         <section className="wallet-card">
           <div>
             <Wallet size={24} />
-            <span>{c("Demo Token wallet", "体验 Token 钱包")}</span>
+            <span>{c("Virtual wallet", "虚拟钱包")}</span>
             <span className="wallet-status">
               {c("Ready to shop", "随时可购")}
             </span>
           </div>
           <small>{c("Available balance", "可用余额")}</small>
           <strong className="wallet-value">
-            {hydrated ? formatCredits(credits) : "—"}
-            <span>Token</span>
+            {hydrated ? formatMoney(balanceAtomic, economy, language) : "—"}
           </strong>
           <p>
             {c(
@@ -76,8 +80,8 @@ export function DashboardStats() {
             )}
           </p>
           <footer>
-            <span>Mini Market member</span>
-            <span>◈ MM / 001</span>
+            <span>Fitimart virtual member</span>
+            <span>◈ FITI / 001</span>
           </footer>
         </section>
         <section className="wallet-refill card">
@@ -87,8 +91,8 @@ export function DashboardStats() {
           </div>
           <p>
             {c(
-              "Top up with free demo Tokens and keep exploring.",
-              "免费补充体验 Token，继续探索你想拥有的能力。",
+              "Add free simulated credit and keep exploring.",
+              "免费补充模拟额度，继续探索你想拥有的内容。",
             )}
           </p>
           <div
@@ -98,27 +102,26 @@ export function DashboardStats() {
           >
             {[1000, 5000, 10000].map((value) => (
               <button
-                aria-pressed={amount === value}
-                onClick={() => setAmount(value)}
+                aria-pressed={amount === String(value)}
+                onClick={() => setAmount(String(value))}
                 key={value}
               >
-                {formatCredits(value)}
-                <small>Token</small>
+                {formatMoney(parseAmountToAtomic(value), economy, language, false)}
+                <small>{economy.currencyLabel}</small>
               </button>
             ))}
           </div>
-          <button
-            className="button button-primary"
-            disabled={!hydrated}
-            onClick={() => topUp(amount)}
-          >
-            <Plus size={16} />
-            {c("Add", "补充")} {formatCredits(amount)} Token
+          <label className="form-field" style={{ marginTop: 16 }}>
+            <span>{c("Custom amount", "自定义金额")}</span>
+            <input className="form-input" inputMode="decimal" value={amount} onChange={(event) => setAmount(event.target.value)} aria-label={c("Custom top-up amount", "自定义补充金额")} />
+          </label>
+          <button className="button button-primary" disabled={!hydrated} onClick={() => topUp(amount)}>
+            <Plus size={16} /> {c("Add", "补充")} {formatMoney(amountPreview, economy, language)}
           </button>
           <small>
             {c(
-              "Always free. Demo Tokens have no cash value.",
-              "始终免费。体验 Token 不可兑换现金。",
+              "Always free. Virtual credit has no cash value.",
+              "始终免费。虚拟额度不可兑换现金。",
             )}
           </small>
         </section>
@@ -186,7 +189,7 @@ export function DashboardStats() {
                         {c("passes", "张通行证")}
                       </small>
                     </span>
-                    <strong>−{formatCredits(order.total)} Token</strong>
+                    <strong>−{formatMoney(order.totalAtomic, economy, language)}</strong>
                     <span className="badge badge-live">
                       {c("Complete", "已完成")}
                     </span>
@@ -194,17 +197,15 @@ export function DashboardStats() {
                   <div className="order-record-detail">
                     {order.items.map((item) => (
                       <div className="order-line" key={item.productId}>
-                        <Link href={`/marketplace/${item.productId}`}>
-                          {item.name} × {item.quantity}
-                        </Link>
+                        {(() => { const product = products.find((entry) => entry.id === item.productId); return product ? <Link href={productHref(product)}>{item.name} × {item.quantity}</Link> : <span>{item.name} × {item.quantity}</span>; })()}
                         <span>
-                          {formatCredits(item.quantity * item.unitPrice)} Token
+                          {formatMoney(multiplyAtomic(item.unitPriceAtomic, item.quantity), economy, language)}
                         </span>
                       </div>
                     ))}
                     <button
                       className="button button-sm"
-                      onClick={() => downloadReceipt(order)}
+                      onClick={() => downloadReceipt(order, language)}
                     >
                       <Download size={14} />
                       {c("Save receipt", "保存收据")}
@@ -254,7 +255,7 @@ export function DashboardStats() {
                         )}
                       </small>
                     </span>
-                    <strong>−{formatCredits(backing.credits)} Token</strong>
+                    <strong>−{formatMoney(backing.amountAtomic, economy, language)}</strong>
                   </div>
                 );
               })
@@ -274,9 +275,16 @@ export function DashboardStats() {
           <div className="orders-list">
             <div className="topup-row">
               <Wallet size={18} />
-              <span>{c("Welcome gift", "入场欢迎礼")}</span>
-              <strong>+10,000 Token</strong>
+              <span>{c("Configured initial credit", "配置的初始额度")}</span>
+              <strong>{formatMoney(economy.initialCreditAtomic, economy, language)}</strong>
             </div>
+            {walletAdjustments.map((item) => (
+              <div className="topup-row" key={item.id}>
+                <Wallet size={18} />
+                <span>{c("Explicit wallet reset", "显式钱包重置")}<small>{formatDateTime(item.createdAt, language)}</small></span>
+                <strong>{formatMoney(item.nextAtomic, economy, language)}</strong>
+              </div>
+            ))}
             {topUps.map((item) => (
               <div className="topup-row" key={item.id}>
                 <Plus size={18} />
@@ -288,7 +296,7 @@ export function DashboardStats() {
                     )}
                   </small>
                 </span>
-                <strong>+{formatCredits(item.amount)} Token</strong>
+                <strong>+{formatMoney(item.amountAtomic, economy, language)}</strong>
               </div>
             ))}
           </div>
