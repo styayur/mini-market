@@ -67,6 +67,8 @@ Passed services on 2026-11-07:
 
 The run also created 80 RSS-derived marketplace products, filtered them in the Marketplace, added an RSS product to the bag, and recorded no page errors.
 
+The same live-service suite also passed against the deployed production URL <https://styayur.github.io/fitimart/> using the actual /fitimart/ base path. The committed live report records that production base URL.
+
 Evidence:
 
 - `docs/evidence/live-feeds.png`
