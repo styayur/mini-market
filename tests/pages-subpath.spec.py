@@ -6,6 +6,7 @@ import http.server
 import os
 from pathlib import Path
 import shutil
+import sys
 import tempfile
 import threading
 from urllib.parse import urlparse
@@ -50,7 +51,7 @@ def main():
                     assert not page.evaluate("document.documentElement.scrollWidth > window.innerWidth")
                 assert not failures, failures
                 assert not errors, errors
-                print(f"PASS Pages subpath /{BASE_PATH}/: assets, routes, query route, and responsive layout")
+                sys.stdout.write(f"PASS Pages subpath /{BASE_PATH}/: assets, routes, query route, and responsive layout\n")
                 browser.close()
         finally:
             server.shutdown()

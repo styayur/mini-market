@@ -1,6 +1,7 @@
 """Accept the Fitimart static build offline: hydration, purchase, migration, and responsive routes."""
 import functools
 import http.server
+import sys
 import json
 from pathlib import Path
 import re
@@ -189,7 +190,7 @@ def main():
 
         report.update(ok=True, remote_requests=[], page_errors=[], limits=["Offline build acceptance uses synthetic state; live feeds are tested separately by tests/live-feeds.spec.py."])
         (output / "report.json").write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
-        print("PASS:", "; ".join(report["checks"]))
+        sys.stdout.write("PASS: " + "; ".join(report["checks"]) + "\n")
     finally:
         server.shutdown()
         server.server_close()

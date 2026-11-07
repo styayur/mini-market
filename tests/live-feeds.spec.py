@@ -6,6 +6,7 @@ import http.server
 import json
 import os
 from pathlib import Path
+import sys
 import threading
 
 from playwright.sync_api import expect, sync_playwright
@@ -115,7 +116,7 @@ def main():
                 "Browser acceptance was performed only for the listed feeds at this run time.",
             ]
             (OUT / "report.json").write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
-            print("PASS live feeds:", json.dumps(report, ensure_ascii=False))
+            sys.stdout.write("PASS live feeds: " + json.dumps(report, ensure_ascii=False) + "\n")
             context.close()
             browser.close()
     finally:
