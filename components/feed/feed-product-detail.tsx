@@ -12,7 +12,7 @@ import { formatDate } from "@/lib/format";
 
 export function FeedProductDetail() {
   const params = useSearchParams();
-  const slug = params.get("slug") ?? "";
+  const slug = params?.get("slug") ?? "";
   const { products, hydrated } = useMarketplace();
   const { language, t } = useLanguage();
   const c = (en: string, zh: string) => (language === "zh" ? zh : en);

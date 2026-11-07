@@ -21,7 +21,7 @@ import { formatMoney } from "@/lib/format";
 import { quantityFor } from "@/lib/commerce";
 
 export function Navbar() {
-  const pathname = usePathname();
+  const pathname = usePathname() ?? "/";
   const [mobileOpen, setMobileOpen] = useState(false);
   const { cartProductIds, cartQuantities, balanceAtomic, economy, hydrated } = useMarketplace();
   const { language, t } = useLanguage();

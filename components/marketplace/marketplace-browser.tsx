@@ -55,15 +55,16 @@ export function MarketplaceBrowser() {
     "price-low": "价格从低到高",
     "price-high": "价格从高到低",
   };
-  const pathname = usePathname();
+  const pathname = usePathname() ?? "/";
   const searchParams = useSearchParams();
+  const activeParams = searchParams ?? new URLSearchParams();
   const [filterOpen, setFilterOpen] = useState(false);
-  const [query, setQuery] = useState(searchParams.get("q") ?? "");
-  const status = searchParams.get("status") ?? "ALL";
-  const type = searchParams.get("type") ?? "ALL";
-  const tag = searchParams.get("tag") ?? "";
-  const source = searchParams.get("source") ?? "ALL";
-  const sort = (searchParams.get("sort") as SortOption) || "trending";
+  const [query, setQuery] = useState(activeParams.get("q") ?? "");
+  const status = activeParams.get("status") ?? "ALL";
+  const type = activeParams.get("type") ?? "ALL";
+  const tag = activeParams.get("tag") ?? "";
+  const source = activeParams.get("source") ?? "ALL";
+  const sort = (activeParams.get("sort") as SortOption) || "trending";
 
   const allItems = useMemo(
     () => [...products, ...concepts],
@@ -75,7 +76,7 @@ export function MarketplaceBrowser() {
   }, [allItems, query, status, type, tag, sort, source]);
 
   const updateParam = (key: string, value: string) => {
-    const params = new URLSearchParams(searchParams.toString());
+    const params = new URLSearchParams(activeParams.toString());
     if (!value || value === "ALL") params.delete(key);
     else params.set(key, value);
     router.replace(`${pathname}${params.size ? `?${params.toString()}` : ""}`, {

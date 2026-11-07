@@ -11,7 +11,7 @@ import { searchMarketplace } from "@/lib/search";
 
 export function SearchExperience() {
   const params = useSearchParams();
-  const initial = params.get("q") ?? "";
+  const initial = params?.get("q") ?? "";
   const [query, setQuery] = useState(initial);
   const [submitted, setSubmitted] = useState(initial);
   const { products, allConcepts } = useMarketplace();
